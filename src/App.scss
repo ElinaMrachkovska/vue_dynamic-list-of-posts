@@ -1,0 +1,22 @@
+* {
+  box-sizing: border-box;
+}
+
+.Sidebar {
+  overflow: hidden;
+  opacity: 0;
+  min-width: 0 !important;
+  max-width: 0 !important;
+  padding: 0 !important;
+  transition: max-width 0.5s ease-in-out, opacity 0.5s ease-in-out;
+
+  &--open {
+    opacity: 1;
+    max-width: 50% !important;
+    padding: 0.75rem !important;
+  }
+}
+
+.message-body {
+  white-space: pre-line;
+}
