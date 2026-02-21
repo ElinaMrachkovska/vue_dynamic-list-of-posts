@@ -2,10 +2,11 @@
 import { ref, watch } from 'vue';
 import { Post } from '../types/Post';
 import { Comment } from '../types/Comment';
-import client from '../utils/http.js';
+import client from '../utils/http';
 import Loader from './loader.vue';
 import CommentItem from './commentItem.vue';
 import NewCommentForm from './newCommentForm.vue';
+import WtiteCommentButton from '../blocks/wtiteCommentButton.vue';
 
 const props = defineProps<{ post: Post }>();
 const emit = defineEmits<{
@@ -68,7 +69,6 @@ const handleCommentAdded = (newComment: Comment) => {
   comments.value.push(newComment);
 };
 
-// Негайне видалення без очікування сервера (UX)
 const handleCommentDelete = (id: number) => {
   comments.value = comments.value.filter(c => c.id !== id);
   client.delete(`/comments/${id}`).catch(() => {
@@ -120,7 +120,8 @@ const handleCommentDelete = (id: number) => {
           <div class="field">
             <label class="label">Body</label>
             <div class="control">
-              <textarea v-model="editBody" class="textarea" rows="4" placeholder="Post body" />
+              <!-- ВИПРАВЛЕНО: textarea не може бути self-closing -->
+              <textarea v-model="editBody" class="textarea" rows="4" placeholder="Post body"></textarea>
             </div>
           </div>
           <div class="field is-grouped">
@@ -168,15 +169,11 @@ const handleCommentDelete = (id: number) => {
         />
 
         <div class="mt-4">
-          <button
+          <!-- Використовуємо окремий компонент кнопки як вимагає завдання -->
+          <WtiteCommentButton
             v-if="!isFormVisible"
-            class="button is-link"
-            type="button"
-            data-cy="WriteCommentButton"
             @click="isFormVisible = true"
-          >
-            Write a comment
-          </button>
+          />
 
           <NewCommentForm
             v-else

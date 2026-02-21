@@ -5,9 +5,8 @@ defineProps<{
   user: User;
 }>();
 
-defineEmits<{
-  (e: 'logout'): void;
-}>();
+const emit = defineEmits<{ 
+  (e: 'logout'): void }>();
 </script>
 
 <template>
@@ -19,9 +18,9 @@ defineEmits<{
       <div class="navbar-item">
         <div class="buttons">
           <div class="mr-5 mb-2">
-            <p>User: {{ user.name }}</p>
+            <p>User: {{ user?.name }}</p>
           </div>
-          <a class="button is-light" @click="$emit('logout')">Logout</a>
+          <button class="button is-light" @click="$emit('logout')">Logout</button>
         </div>
       </div>
     </div>

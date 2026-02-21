@@ -2,6 +2,7 @@
 import PostPreview from './postPreview.vue';
 import AddPost from './addPost.vue';
 import { Post } from '../types/Post';
+import '../App.scss';
 
 defineProps<{
   selectedPost: Post | null;
@@ -44,32 +45,3 @@ const emit = defineEmits<{
 
 </template>
 
-<style scoped lang="scss">
-.Sidebar {
-  overflow: hidden;
-  opacity: 0;
-  min-width: 0;
-  max-width: 0;
-  padding: 0;
-  transition-property: max-width, opacity;
-  transition-duration: 0.5s;
-  transition-timing-function: ease-in-out;
-
-  @media (min-width: 769px) {
-    max-width: 0;
-  }
-}
-
-.Sidebar--open {
-  opacity: 1;
-  max-width: 50%;
-
-  @media (min-width: 769px) {
-    max-width: 50%;
-  }
-}
-
-.message-body {
-  white-space: pre-line;
-}
-</style>

@@ -1,0 +1,34 @@
+import { client } from '../utils/http';
+
+export const getComment = async (postId) => {
+  const response = await client.get(`/comments?postId=${postId}`);
+
+  return response.data;
+};
+
+export const createComment = async (postId, {name, email, body}) => {
+  const response = await client.post('/comments', {
+    postId,
+    name,
+    email,
+    body,
+  });
+
+  return response.data;
+};
+export const updateComment = async ({ id, name, email, body }) => {
+  const response = await client.patch(`/comments/${id}`, {
+    id, 
+    name,
+    email,
+    body
+  });
+
+  return response.data;
+};
+
+export const deleteComment = async (id) => {
+  const response = await client.delete(`/comments/${id}`);
+
+  return response.data;
+};

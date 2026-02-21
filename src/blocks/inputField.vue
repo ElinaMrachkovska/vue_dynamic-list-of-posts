@@ -6,24 +6,27 @@ const props = defineProps<{
   name: string,
   placeholder?: string,
   errorMessage?: string,
+  type?: 'text' | 'email' | 'password';
 }>();
 
 
 const emit = defineEmits<{
   (e: 'update:modelValue', value: string): void
+  (e: 'update:errorMessage', value: string): void
 }>();
 
 const handleInput = (e: Event) => {
   const target = e.target as HTMLInputElement;
   emit('update:modelValue', target.value);
+  emit('update:errorMessage', '');
 }
 
 
 </script>
 <template>
-<div class="field" data-cy="NameField">
+<div class="field" data-cy="Field-${name}">
   <label class="label" 
-  :for="`comment-author-name-${name}`"
+  :for="`comment-${name}`"
   >
     {{ title }}
   </label>
@@ -32,11 +35,14 @@ const handleInput = (e: Event) => {
       type="text"
       :name="name"
       :value="modelValue"
-      :id="`comment-author-name-${name}`"
+      :id="`comment-${name}`"
       :placeholder="placeholder"
       class="input"
       @input="handleInput"
       :class="{ 'is-danger': errorMessage }"
+      :aria-invalid="!!errorMessage"
+      :aria-describedby="errorMessage ? `error-${name}` : undefined"
+
     />
     <span class="icon is-small is-left">
       <i class="fas fa-user"></i>

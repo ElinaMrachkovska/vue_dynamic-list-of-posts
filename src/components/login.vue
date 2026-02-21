@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { User } from '../types/User';
-import client from '../utils/http.js';
+import client from '../utils/http';
 
 const emit = defineEmits<{
   (e: 'login', user: User): void
@@ -19,7 +19,7 @@ const handleSubmit = async () => {
   isLoading.value = true;
   errorMessage.value = '';
   try {
-    const response = await client.get<User[]>(`/users?email=${userEmail.value.trim()}`);
+    const response = await client.get<User[]>(`/users?email=${encodeURIComponent(userEmail.value.trim())}`);
     if (response.data.length === 0) {
       errorMessage.value = 'User not found. Please check your email.';
     } else {
@@ -49,6 +49,7 @@ const handleSubmit = async () => {
             class="input"
             :class="{ 'is-danger': errorMessage }"
             placeholder="Enter your email"
+            @input="errorMessage = ''"
             required
           />
           <span class="icon is-small is-left">

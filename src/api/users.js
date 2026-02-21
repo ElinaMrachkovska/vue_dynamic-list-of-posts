@@ -1,6 +1,6 @@
-import { client } from '@/utils/http';
+import { client } from '../utils/http';
 
-export const getUsers = async (userId) => {
+export const getUser = async (userId) => {
   const response = await client
   .get(`/users/${userId}`);
 
@@ -8,8 +8,8 @@ export const getUsers = async (userId) => {
 };
 
 export const createUser = async (name, email) => {
-  const response = await client.
-  post('/users', {
+  const response = await client
+  .post('/users', {
     name,
     email,
   });
@@ -18,8 +18,8 @@ export const createUser = async (name, email) => {
 };
 
 export const updateUser = async ({ id, name, email }) => {
-  const response = await client.
-  patch(`/users/${id}`, {
+  const response = await client
+  .patch(`/users/${id}`, {
     name,
     email,
   });

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import client from '../utils/http.js';
+import client from '../utils/http';
 import { Comment } from '../types/Comment';
 import InputField from '../blocks/inputField.vue';
 import TextAreaField from '../blocks/textAreaField.vue';
@@ -102,10 +102,10 @@ const handleClear = () => {
     <InputField
       :modelValue="name"
       @update:modelValue="onNameChange"
+      v-model:errorMessage="nameError"
       title="Author Name"
       name="name"
       placeholder="Name Surname"
-      :errorMessage="nameError"
     />
 
     <InputField
@@ -113,8 +113,9 @@ const handleClear = () => {
       @update:modelValue="onEmailChange"
       title="Author Email"
       name="email"
+      type="email"
       placeholder="email@test.com"
-      :errorMessage="emailError"
+      v-model:errorMessage="emailError"
     />
 
     <TextAreaField
@@ -123,7 +124,7 @@ const handleClear = () => {
       title="Comment Text"
       name="body"
       placeholder="Type comment here"
-      :errorMessage="bodyError"
+      v-model:errorMessage="bodyError"
     />
 
     <div class="field is-grouped">

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import client from '../utils/http.js';
+import client from '../utils/http';
 import { Post } from '../types/Post';
 import InputField from '../blocks/inputField.vue';
 import TextAreaField from '../blocks/textAreaField.vue';
@@ -16,6 +16,7 @@ const body = ref('');
 const isSubmitting = ref(false);
 const titleError = ref('');
 const bodyError = ref('');
+const submitError = ref('');
 
 const onTitleChange = (val: string) => {
   title.value = val;
@@ -44,11 +45,23 @@ const handleSubmit = async () => {
       body: body.value.trim(),
     });
     emit('added', response.data);
+    title.value = '';
+    body.value = '';
+    titleError.value = '';
+    bodyError.value = '';
   } catch {
-    bodyError.value = 'Failed to create post. Please try again.';
+    submitError.value = 'Failed to create post. Please check your connection and try again.';
   } finally {
     isSubmitting.value = false;
   }
+};
+const handleCancel = () => {
+  title.value = '';
+  body.value = '';
+  titleError.value = '';
+  bodyError.value = '';
+  submitError.value = '';
+  emit('cancel');
 };
 </script>
 
@@ -90,7 +103,7 @@ const handleSubmit = async () => {
           <button
             type="button"
             class="button is-link is-light"
-            @click="emit('cancel')"
+            @click="handleCancel"
           >
             Cancel
           </button>

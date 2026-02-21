@@ -1,7 +1,8 @@
-import axios from 'axios';
+import axios, { AxiosInstance } from 'axios';
+
 const BASE_URL = 'https://mate.academy/students-api';
 
-const client = axios.create({
+const client: AxiosInstance = axios.create({
   baseURL: BASE_URL,
 });
 

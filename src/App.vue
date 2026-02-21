@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { User } from './types/User';
 import { Post } from './types/Post';
-import client from './utils/http.js';
+import client from './utils/http';
 import Login from './components/login.vue';
 import Header from './blocks/header.vue';
 import PostsList from './components/postsList.vue';
@@ -16,6 +16,7 @@ const selectedPost = ref<Post | null>(null);
 const isLoadingPosts = ref(false);
 const isAddingPost = ref(false);
 const postsError = ref<string | null>(null);
+  const deleteError = ref<string | null>(null); 
 
 const handleLogin = async (user: User) => {
   currentUser.value = user;
@@ -67,12 +68,26 @@ const handlePostAdded = (newPost: Post) => {
 };
 
 const handlePostDelete = async (postId: number) => {
+  deleteError.value = null;
+
+  // 1. Зберігаємо копії для rollback
+  const previousPosts = [...posts.value];
+  const previousSelected = selectedPost.value;
+
+  // 2. Одразу оновлюємо UI (optimistic update)
+  posts.value = posts.value.filter(p => p.id !== postId);
+  if (selectedPost.value?.id === postId) {
+    selectedPost.value = null;
+  }
+
+  // 3. Запит на сервер
   try {
     await client.delete(`/posts/${postId}`);
-    posts.value = posts.value.filter(p => p.id !== postId);
-    if (selectedPost.value?.id === postId) selectedPost.value = null;
   } catch {
-    console.error('Failed to delete post');
+    // 4. Якщо помилка — rollback і показуємо повідомлення
+    posts.value = previousPosts;
+    selectedPost.value = previousSelected;
+    deleteError.value = 'Failed to delete post. Please try again.';
   }
 };
 
@@ -92,15 +107,13 @@ const handlePostEdit = async (updatedPost: Post) => {
 </script>
 
 <template>
-  <Login v-if="!currentUser" @login="handleLogin" />
+  <Login v-if="currentUser === null" @login="handleLogin" />
 
   <template v-else>
     <Header :user="currentUser" @logout="handleLogout" />
 
     <main class="section">
-      <!-- Без container — щоб tile is-ancestor займав повну ширину -->
       <div class="tile is-ancestor">
-
         <div class="tile is-parent">
           <div class="tile is-child box is-success">
             <div class="block">
@@ -139,7 +152,7 @@ const handlePostEdit = async (updatedPost: Post) => {
                 <PostsList
                   v-if="posts.length > 0"
                   :posts="posts"
-                  :selectedPostId="selectedPost?.id ?? null"
+                  :selectedPostId="selectedPost ? selectedPost.id : null"
                   @select="togglePost"
                 />
               </template>
