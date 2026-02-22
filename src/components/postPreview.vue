@@ -6,7 +6,7 @@ import client from '../utils/http';
 import Loader from './loader.vue';
 import CommentItem from './commentItem.vue';
 import NewCommentForm from './newCommentForm.vue';
-import WtiteCommentButton from '../blocks/wtiteCommentButton.vue';
+import WriteCommentButton from '../blocks/writeCommentButton.vue';
 
 const props = defineProps<{ post: Post }>();
 const emit = defineEmits<{
@@ -170,7 +170,7 @@ const handleCommentDelete = (id: number) => {
 
         <div class="mt-4">
           <!-- Використовуємо окремий компонент кнопки як вимагає завдання -->
-          <WtiteCommentButton
+          <WriteCommentButton
             v-if="!isFormVisible"
             @click="isFormVisible = true"
           />
