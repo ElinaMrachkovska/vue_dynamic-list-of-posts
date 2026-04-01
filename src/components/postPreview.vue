@@ -80,7 +80,6 @@ const handleCommentDelete = (id: number) => {
 <template>
   <div class="content" data-cy="PostDetails">
 
-    <!-- Звичайний перегляд поста -->
     <template v-if="!isEditing">
       <div class="block">
         <div class="is-flex is-justify-content-space-between is-align-items-center">
@@ -106,7 +105,6 @@ const handleCommentDelete = (id: number) => {
       </div>
     </template>
 
-    <!-- Режим редагування поста -->
     <template v-else>
       <div class="block">
         <h2>#{{ post.id }}</h2>
@@ -120,7 +118,6 @@ const handleCommentDelete = (id: number) => {
           <div class="field">
             <label class="label">Body</label>
             <div class="control">
-              <!-- ВИПРАВЛЕНО: textarea не може бути self-closing -->
               <textarea v-model="editBody" class="textarea" rows="4" placeholder="Post body"></textarea>
             </div>
           </div>
@@ -138,7 +135,6 @@ const handleCommentDelete = (id: number) => {
 
     <hr />
 
-    <!-- Коментарі -->
     <div class="block" data-cy="PostComments">
       <p class="title is-5">Comments:</p>
 
@@ -169,7 +165,7 @@ const handleCommentDelete = (id: number) => {
         />
 
         <div class="mt-4">
-          <!-- Використовуємо окремий компонент кнопки як вимагає завдання -->
+        
           <WriteCommentButton
             v-if="!isFormVisible"
             @click="isFormVisible = true"

@@ -1,7 +1,6 @@
 <script setup lang="ts">
-const emit = defineEmits<{
-  (e: 'click'): void
-}>();
+defineProps({})
+defineEmits(['open'])
 </script>
 
 <template>
@@ -9,7 +8,7 @@ const emit = defineEmits<{
     type="button"
     class="button is-link"
     data-cy="WriteCommentButton"
-    @click="emit('click')"
+    @click="$emit('open')"
   >
     Write a comment
   </button>

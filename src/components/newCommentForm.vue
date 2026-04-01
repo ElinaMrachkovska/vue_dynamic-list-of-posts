@@ -15,13 +15,10 @@ const email = ref('');
 const body = ref('');
 const isSubmitting = ref(false);
 
-// Помилки — показуємо ТІЛЬКИ після спроби сабміту
 const nameError = ref('');
 const emailError = ref('');
 const bodyError = ref('');
 
-// Очищення помилки при зміні поля (watch через v-model автоматично тригерить @update:modelValue)
-// Тому використовуємо окремі handlers
 
 const onNameChange = (val: string) => {
   name.value = val;

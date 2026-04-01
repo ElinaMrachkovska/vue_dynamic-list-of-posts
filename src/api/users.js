@@ -1,37 +1,39 @@
 import { client } from '../utils/http';
 
-export const getUser = async (userId) => {
-  const response = await client
-  .get(`/users/${userId}`);
+export async function getUsers() {
+  const { data }  = await client.get('/users');
 
-  return response.data;
+  return data;
+};
+export async function getUser(id) {
+  const { data }  = await client.get(`/users/${id}`);
+
+  return data;
 };
 
-export const createUser = async (name, email) => {
-  const response = await client
-  .post('/users', {
+export async function createUser(name, email) {
+  const { data } = await client.post('/users', {
     name,
     email,
   });
 
-  return response.data;
-};
+  return data;
+}
 
-export const updateUser = async ({ id, name, email }) => {
-  const response = await client
-  .patch(`/users/${id}`, {
+export async function updateUser({ id, name, email }) {
+  const { data } = await client.patch(`/users/${id}`, {
     name,
     email,
   });
 
-  return response.data;
-};
+  return data;
+}
 
-export const deleteUser = async id => {
-  const response = await client
-  .delete(`/users/${id}`);
+export async function deleteUser(id) {
+  const { data } = await client.delete(`/users/${id}`);
 
-  return response.data;
-};
+  return data;
+}
+
 
 
