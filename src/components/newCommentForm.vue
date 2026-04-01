@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed, onMounted} from 'vue';
 import client from '../utils/http';
 import { Comment } from '../types/Comment';
 import InputField from '../blocks/inputField.vue';
 import TextAreaField from '../blocks/textAreaField.vue';
+import { deleteComment } from '../api/comments';
 
 const props = defineProps<{ postId: number }>();
 const emit = defineEmits<{
@@ -58,6 +59,7 @@ const validate = (): boolean => {
 
   return valid;
 };
+
 
 const handleSubmit = async () => {
   // Показуємо помилки лише після сабміту

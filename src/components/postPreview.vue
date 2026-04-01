@@ -7,6 +7,7 @@ import Loader from './loader.vue';
 import CommentItem from './commentItem.vue';
 import NewCommentForm from './newCommentForm.vue';
 import WriteCommentButton from '../blocks/writeCommentButton.vue';
+import { deleteComment } from '../api/comments'
 
 const props = defineProps<{ post: Post }>();
 const emit = defineEmits<{
@@ -69,12 +70,24 @@ const handleCommentAdded = (newComment: Comment) => {
   comments.value.push(newComment);
 };
 
-const handleCommentDelete = (id: number) => {
-  comments.value = comments.value.filter(c => c.id !== id);
-  client.delete(`/comments/${id}`).catch(() => {
-    console.error('Failed to delete comment on server');
-  });
-};
+async function handleDeleteComment(commentId: number) {
+  // store original comments list for rollback
+  const original = comments.value.slice()
+
+  // optimistic UI update: remove the comment immediately
+  comments.value = comments.value.filter(c => c.id !== commentId)
+
+  try {
+    await deleteComment(commentId)
+  } catch (err) {
+    // rollback UI to original state and notify user
+    comments.value = original
+    commentsError.value = 'Failed to delete comment. Please try again.'
+    // keep console logging for debugging
+    // eslint-disable-next-line no-console
+    console.error(err)
+  }
+}
 </script>
 
 <template>
@@ -161,7 +174,7 @@ const handleCommentDelete = (id: number) => {
           v-for="comment in comments"
           :key="comment.id"
           v-bind="comment"
-          @delete="handleCommentDelete"
+          @delete="handleDeleteComment"
         />
 
         <div class="mt-4">
